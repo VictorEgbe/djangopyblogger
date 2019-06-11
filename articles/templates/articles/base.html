@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }} | Blogger </title>
+    {% else %}
+    <title>Blogger</title>
+    {% endif %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body>
+    {% include 'articles/header.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="text-align: center;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% block content %}
+
+                {% endblock content %}
+            </div>
+            <div class="col-md-3">
+                {% include 'articles/sidebar.html' %}
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+{% extends 'articles/base.html' %}
+
+{% block content %}
+<div class="content-section">
+    <div class="alert mb-3" width='100%' style="border-color: #dc3545; color: #dc3545">
+        <strong>Oooppss!! Invalid credentials. Please verify your username and password and
+            try signing in again.</strong>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-outline-info btn-sm" href="{% url 'login' %}">Try Again</a>
+        <small class="text-muted ml-2">
+            <a href="#"> Forgot Password? </a>
+        </small>
+    </div>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Need an account? <a href="{% url 'register' %}" class="ml-2"> Register Now! </a>
+        </small>
+    </div>
+</div>
+{% endblock content %}

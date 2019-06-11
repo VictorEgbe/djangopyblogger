@@ -1,0 +1,21 @@
+{% extends 'articles/base.html' %}
+
+{% block content %}
+
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <h4 style="color: red">Are you sure you want to delete the article '{{article}}'?</h4>
+        <p>Note that deleting is irreversible.</p>
+        <div class="form-group">
+            <a class="btn btn-success mt-3" href="{{ article.get_absolute_url }}">
+                No, take me back
+            </a>
+            <button class="btn btn-danger ml-5 mt-3" type="submit">
+                Yes, delete
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

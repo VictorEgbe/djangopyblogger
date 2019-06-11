@@ -1,0 +1,12 @@
+{% extends 'articles/base.html' %}
+
+{% block content %}
+<div class="content-section">
+    <div class="alert mb-3" width='100%' style="border-color: #dc3545; text-align: center; color: #dc3545">
+        <strong>403 FORBIDDEN: You are not allowed to view this page</strong>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-outline-info btn-sm" href="{% url 'index' %}">Home</a>
+    </div>
+</div>
+{% endblock content %}

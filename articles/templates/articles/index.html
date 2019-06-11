@@ -1,0 +1,21 @@
+{% extends "articles/base.html" %}
+
+{% block content %}
+
+{% for article in articles %}
+<article class="media content-section">
+    <img src="{{ article.thumbnail.url }}" class="rounded-circle article-img">
+    <div class="media-body">
+        <div class="article-metadata">By
+            <a href="#" class="mr-2"> {{ article.author }} </a> On
+            <small class="text-muted"> {{ article.date_created|date:"F d, Y."}} </small>
+        </div>
+        <h4> <a href="{{ article.get_absolute_url }}" class="article-title"> {{ article.title }}</a> </h4>
+        <p class="article-content"> {{ article.snippets }} </p>
+    </div>
+</article>
+{% empty %}
+<h4 class="alert alert-info">No articles at this moment. Please sign up and create your first article</h4>
+{% endfor %}
+
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'articles/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="content-section">
+    <form method="POST" action="{% url 'update' article.slug %}">
+        {% if form.errors %}
+        <div class="alert mb-3" width='100%' style="border-color: #dc3545; color: #dc3545">
+            <strong>Please correct the error(s) below</strong>
+        </div>
+        {% endif %}
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="form-group">
+            <button class="btn btn-outline-primary" type="submit">Update</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

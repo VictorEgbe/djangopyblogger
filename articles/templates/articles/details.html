@@ -1,0 +1,28 @@
+{% extends "articles/base.html" %}
+
+{% block content %}
+
+<article class="media content-section">
+    <div class="media-body">
+        <img src="{{ article.thumbnail.url }}" class="rounded-circle article-img" />
+        <div class="article-metadata">
+            <a href="#" class="mr-2">Author: {{ article.author }}</a>
+            <small class="text-muted">{{ article.date_created |date:"F d, Y." }}
+            </small>
+            {% if article.author == request.user %}
+            <div>
+                <a href="{% url 'delete_article' article.slug %}" class="btn btn-danger btn-sm mb-1 mt-1">
+                    Delete
+                </a>
+                <a href="{% url 'update' article.slug %}" class="btn btn-secondary btn-sm mb-1 mt-1"> Update </a>
+            </div>
+            {% endif %}
+            <h3 class="article-title">{{ article.title }}</h3>
+        </div>
+        <p>
+            {{ article.content }}
+        </p>
+    </div>
+</article>
+
+{% endblock content %}

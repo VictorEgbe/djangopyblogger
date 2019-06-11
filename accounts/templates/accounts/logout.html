@@ -1,0 +1,20 @@
+{% extends 'articles/base.html' %}
+
+{% block content %}
+
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <h4 class="mb-3">Are you sure you want to log out?</h4>
+        <div class="form-group">
+            <a class="btn btn-success mt-3" href="{% url 'index' %}">
+                No, take me to home page
+            </a>
+            <button class="btn btn-outline-danger ml-5 mt-3" type="submit">
+                Yes, log me out
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
