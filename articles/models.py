@@ -41,7 +41,7 @@ class Comment(models.Model):
         if len(self.content) > 50:
             return self.content
         else:
-            return f'{self.content[:50]}...'
+            return f'{self.content[0:50]}...'
 
     class Meta:
         ordering = ['-date_created']

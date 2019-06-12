@@ -1,4 +1,5 @@
 {% extends "articles/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
@@ -24,5 +25,45 @@
         </p>
     </div>
 </article>
+<br>
+
+{% if user.is_authenticated %}
+<div class="content-section">
+    <form method="POST">
+        {% if form.errors %}
+        <div class="alert mb-3" width='100%' style="border-color: #dc3545; color: #dc3545">
+            <strong>Please correct the error(s) below</strong>
+        </div>
+        {% endif %}
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="form-group">
+            <button class="btn btn-primary btn-sm" type="submit">Comment</button>
+        </div>
+    </form>
+</div>
+<br>
+{% endif %}
+
+<div class="content-section text-muted">
+    <h5>Comments
+        {% if not user.is_authenticated %}
+        <small style="color: red;">: Sign in to be able to comment. </small>
+        {% endif %}
+    </h5>
+</div>
+
+{% for comment in comments %}
+<article class="media content-section">
+    <img src="{{ article.thumbnail.url }}" class="rounded-circle article-img">
+    <div class="media-body">
+        <div class="article-metadata">By
+            <a href="#" class="mr-2"> {{ comment.author }} </a> On
+            <small class="text-muted"> {{ comment.date_created|date:"F d, Y."}} </small>
+        </div>
+        <p> {{ comment.content }} </p>
+    </div>
+</article>
+{% endfor %}
 
 {% endblock content %}

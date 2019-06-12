@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms import ArticleCreationForm
-from .models import Article
+from .forms import ArticleCreationForm, UserCommentForm
+from .models import Article, Comment
 
 
 def index(request):
@@ -15,7 +15,7 @@ def index(request):
         articles = Article.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query) |
-            Q(author__username__icontains=query))
+            Q(author__username__icontains=query)).distict()
     else:
         articles = Article.objects.all()
     context = {
@@ -27,9 +27,22 @@ def index(request):
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)
+    comments = Comment.objects.filter(article=article)
+    form = UserCommentForm()
+    if request.method == 'POST':
+        form = UserCommentForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.article = article
+            instance.save()
+            messages.success(request, f'You commented on the post {article.title}')
+            return HttpResponseRedirect(article.get_absolute_url())
     context = {
         'title': 'Article Detail',
-        'article': article
+        'article': article,
+        'comments': comments,
+        'form': form
     }
     return render(request, 'articles/details.html', context)
 

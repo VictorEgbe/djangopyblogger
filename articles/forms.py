@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Article
+from .models import Article, Comment
 
 
 class ArticleCreationForm(forms.ModelForm):
@@ -8,16 +8,12 @@ class ArticleCreationForm(forms.ModelForm):
         model = Article
         fields = ('title', 'content')
 
-    # def clean_title(self):
-    #     title = self.cleaned_data.get('title')
-    #     title = str(title)
-    #     if len(title.strip()) == 0:
-    #         raise forms.ValidationError('Invalid title')
-    #     return title
-
-    # def clean_content(self):
-    #     content = self.cleaned_data.get('content')
-    #     content = str(content)
-    #     if len(content.strip()) == 0:
-    #         raise forms.ValidationError('Invalid content')
-    #     return content
+   
+class UserCommentForm(forms.ModelForm):
+    content = forms.CharField(label='', widget=forms.Textarea(attrs={
+        'rows': 4,
+        'placeholder': 'Leave your comment here'
+    }))
+    class Meta:
+        model = Comment
+        fields = ('content',)
