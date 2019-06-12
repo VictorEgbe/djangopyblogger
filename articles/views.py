@@ -15,7 +15,7 @@ def index(request):
         articles = Article.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query) |
-            Q(author__username__icontains=query)).distict()
+            Q(author__username__icontains=query)).distinct()
     else:
         articles = Article.objects.all()
     context = {
@@ -30,18 +30,20 @@ def article_detail(request, slug):
     comments = Comment.objects.filter(article=article)
     form = UserCommentForm()
     if request.method == 'POST':
+        if not request.user.is_authenticated: raise PermissionDenied 
         form = UserCommentForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.author = request.user
             instance.article = article
             instance.save()
-            messages.success(request, f'You commented on the post {article.title}')
+            messages.success(request, f'You commented on the post "{article.title}".')
             return HttpResponseRedirect(article.get_absolute_url())
     context = {
         'title': 'Article Detail',
         'article': article,
         'comments': comments,
+        'count': comments.count(),
         'form': form
     }
     return render(request, 'articles/details.html', context)

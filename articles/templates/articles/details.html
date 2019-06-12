@@ -46,7 +46,7 @@
 {% endif %}
 
 <div class="content-section text-muted">
-    <h5>Comments
+    <h5>Comments({{ count }})
         {% if not user.is_authenticated %}
         <small style="color: red;">: Sign in to be able to comment. </small>
         {% endif %}
