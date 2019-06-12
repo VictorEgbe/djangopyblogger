@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 
 from .forms import UserLoginForm, UserRegistrationForm
 
@@ -64,3 +66,21 @@ def registration(request):
         'form': form
     }
     return render(request, 'accounts/register.html', context)
+
+
+@login_required
+def password_change(request):
+    form = PasswordChangeForm(request.user)
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            password = form.cleaned_data.get('new_password2')
+            user.set_password(password)
+            user.save()
+            user = authenticate(username=user.username, password=password)
+            login(request, user)
+            messages.success(request, f'Your password was changed successfully!')
+            return HttpResponseRedirect('/')
+    context = {'title': 'Change password', 'form': form}
+    return render(request, 'accounts/password_change.html', context)

@@ -1,33 +1,53 @@
 <header class="site-header">
-    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-            <a href="{% url 'index' %}" class="navbar-brand mr-4"> Blogger </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggler"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar-toggler">
-                <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{% url 'index' %}">Home</a>
-                    <a class="nav-item nav-link" href="#" target="_blank"> Django </a>
-                </div>
-                <!-- Navbar Right Side-->
-                <div class="navbar-nav">
-                    {% if user.is_authenticated %}
-                    <a href="#" class="nav-item nav-link">{{ user }}</a>
-                    <a href=" {% url 'create_article' %} " class="nav-item nav-link">Create Article </a>
-                    <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
-                    {% else %}
-                    <a href="{% url 'login' %}" class="nav-item nav-link">Login</a>
-                    <a href="{% url 'register' %}" class="nav-item nav-link">Register</a>
-                    {% endif %}
-                </div>
-                <form class="form-inline my-2 my-lg-0" action="{% url 'index' %}">
-                    <input aria-label="Search" type="search" name="q" value="{{ request.GET.q }}"
-                        class="form-control mr-sm-2" placeholder="Search">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
-                </form>
-            </div>
+  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+    <div class="container">
+      <a href="{% url 'index' %}" class="navbar-brand mr-4"> Blogger </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar-toggler"
+        aria-controls="navbarCollapse"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar-toggler">
+        <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link" href="{% url 'index' %}">Home</a>
+          <a class="nav-item nav-link" href="#" target="_blank"> Django </a>
         </div>
-    </nav>
+        <!-- Navbar Right Side-->
+        <div class="navbar-nav">
+          {% if user.is_authenticated %}
+          <a href="#" class="nav-item nav-link">{{ user }}</a>
+          <a href="{% url 'password_change' %}" class="nav-item nav-link">
+            Change Password
+        </a>
+          <a href=" {% url 'create_article' %} " class="nav-item nav-link"
+            >Create Article
+          </a>
+          <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
+          {% else %}
+          <a href="{% url 'login' %}" class="nav-item nav-link">Login</a>
+          <a href="{% url 'register' %}" class="nav-item nav-link">Register</a>
+          {% endif %}
+        </div>
+        <form class="form-inline my-2 my-lg-0" action="{% url 'index' %}">
+          <input
+            aria-label="Search"
+            type="search"
+            name="q"
+            value="{{ request.GET.q }}"
+            class="form-control mr-sm-2"
+            placeholder="Search"
+          />
+          <button type="submit" class="btn btn-outline-success my-2 my-sm-0">
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
 </header>
