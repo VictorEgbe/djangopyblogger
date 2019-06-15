@@ -1,38 +1,34 @@
 {% extends 'articles/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-{% load crispy_forms_tags %}
 
 <div class="content-section">
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb4">Log In </legend>
+            <legend class="border-bottom mb4">Log In</legend>
         </fieldset>
-        {% if form.errors %}
-        <div class="alert mb-3" width='100%' style="border-color: #dc3545; color: #dc3545">
-            <strong>Please correct the error(s) below</strong>
-        </div>
-        {% endif %}
         {% if request.GET.next %}
-        <div class="alert mb-3" width='100%' style="border-color: #dc3545; color: #dc3545">
+        <div class="alert mb-3" width="100%" style="border-color: #dc3545; color: #dc3545">
             <strong>You need to log in to view this page</strong>
         </div>
         {% endif %}
-        {{ form|crispy }}
+        {{ form | crispy }}
         {% if request.GET.next %}
-         <input type="hidden" name="next" value="{{ request.GET.next }}" />
+        <input type="hidden" name="next" value="{{ request.GET.next }}" />
         {% endif %}
         <div class="form-group">
-            <button class="btn btn-outline-info" type="submit"> Sign In </button>
+            <button class="btn btn-outline-info" type="submit">Sign In</button>
             <small class="text-muted ml-2">
-                <a href="#"> Forgot Password? </a>
+                <a href="{% url 'password_reset' %}"> Forgot Password? </a>
             </small>
         </div>
     </form>
     <div class="border-top pt-3">
         <small class="text-muted">
-            Need an account? <a href=" {% url 'register' %} " class="ml-2"> Register Now! </a>
+            Need an account?
+            <a href=" {% url 'register' %} " class="ml-2"> Register Now! </a>
         </small>
     </div>
 </div>

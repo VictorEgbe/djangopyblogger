@@ -3,6 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetCompleteView
+)
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
@@ -13,18 +19,19 @@ def login_view(request):
     if request.user.is_authenticated:
         messages.info(request, f'You are already logged in.')
         return HttpResponseRedirect('/')
-    form = UserLoginForm()
+    form = UserLoginForm(request)
 
     if request.method == 'POST':
         next_page = request.POST.get('next')
-        form = UserLoginForm(request.POST)
+        form = UserLoginForm(request, request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, f'Welcome back {username}')
-            return HttpResponseRedirect(next_page) if next_page else HttpResponseRedirect('/')
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome back {username}')
+                return HttpResponseRedirect(next_page) if next_page else HttpResponseRedirect('/')
 
     context = {
         'form': form,
@@ -48,7 +55,8 @@ def logout_view(request):
 
 def registration(request):
     if request.user.is_authenticated:
-        messages.info(request, f'You can not register when you are already logged in. Log out first.')
+        messages.info(
+            request, f'You can not register when you are already logged in. Log out first.')
         return redirect('logout')
     form = UserRegistrationForm()
     if request.method == 'POST':
@@ -59,7 +67,8 @@ def registration(request):
             form.save()
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, f'Welcome {username}.Your account was successfully created!')
+            messages.success(
+                request, f'Welcome {username}.Your account was successfully created!')
             return HttpResponseRedirect('/')
     context = {
         'title': 'Register',
@@ -79,8 +88,34 @@ def password_change(request):
             user.set_password(password)
             user.save()
             user = authenticate(username=user.username, password=password)
-            login(request, user)
-            messages.success(request, f'Your password was changed successfully!')
-            return HttpResponseRedirect('/')
+            if user is not None:
+                login(request, user)
+                messages.success(
+                    request, f'Your password was changed successfully!')
+                return HttpResponseRedirect('/')
+            else:
+                messages.warning(request, f'Something went wrong!')
+                return redirect('login')
     context = {'title': 'Change password', 'form': form}
     return render(request, 'accounts/password_change.html', context)
+
+
+class UserResetView(PasswordResetView):
+    template_name = 'accounts/password_reset.html'
+    extra_context = {'title': 'Password Reset'}
+
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'accounts/password_reset_confirm.html'
+    extra_context = {'title': 'Password Reset Confirm'}
+    # success_url = '/accounts/login/' # This also works.
+
+
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'accounts/password_reset_done.html'
+    extra_context = {'title': 'Password Reset Done'}
+
+
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'accounts/password_reset_complete.html'
+    extra_context = {'title': 'Password Reset Completed'}
