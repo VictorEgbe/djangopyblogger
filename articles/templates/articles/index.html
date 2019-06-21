@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% for article in articles %}
+{% for article in page.object_list %}
 <article class="media content-section">
     <img src="{{ article.thumbnail.url }}" class="rounded-circle article-img">
     <div class="media-body">
@@ -15,7 +15,9 @@
     </div>
 </article>
 {% empty %}
-<h4 class="alert alert-info">No articles at this moment. Please sign up and create your first article</h4>
+<h4 class="alert alert-info">No Search Result for "{{ request.GET.q }}"</h4>
 {% endfor %}
+
+{% include 'articles/paginator.html' %}
 
 {% endblock content %}

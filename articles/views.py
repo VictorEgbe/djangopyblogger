@@ -1,26 +1,32 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ArticleCreationForm, UserCommentForm
 from .models import Article, Comment
 
 
 def index(request):
+    page_request = request.GET.get('page')
     query = request.GET.get('q')
     if query:
         articles = Article.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query) |
             Q(author__username__icontains=query)).distinct()
+        paginator = Paginator(articles, 2)
+        page = paginator.get_page(page_request)
     else:
         articles = Article.objects.all()
+        paginator = Paginator(articles, 2)
+        page = paginator.get_page(page_request)
     context = {
         'title': 'Home',
-        'articles': articles
+        'page': page
     }
     return render(request, 'articles/index.html', context)
 
@@ -30,7 +36,8 @@ def article_detail(request, slug):
     comments = Comment.objects.filter(article=article)
     form = UserCommentForm()
     if request.method == 'POST':
-        if not request.user.is_authenticated: raise PermissionDenied 
+        if not request.user.is_authenticated:
+            raise PermissionDenied
         form = UserCommentForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
@@ -71,7 +78,8 @@ def create_article(request):
 @login_required
 def update(request, slug):
     article = get_object_or_404(Article, slug=slug)
-    if not request.user ==  article.author: raise PermissionDenied 
+    if not request.user == article.author:
+        raise PermissionDenied
     form = ArticleCreationForm(instance=article)
     if request.method == 'POST':
         form = ArticleCreationForm(request.POST, instance=article)
@@ -91,7 +99,8 @@ def update(request, slug):
 @login_required
 def delete_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
-    if not request.user == article.author: raise PermissionDenied
+    if not request.user == article.author:
+        raise PermissionDenied
     if request.method == 'POST':
         article.delete()
         messages.success(request, f'Article deleted successfully')
