@@ -1,6 +1,11 @@
-{% extends "articles/base.html" %}
+{% extends 'articles/base.html' %}
+
 
 {% block content %}
+
+<h4 class="main content-section" style="text-align: center">
+    Articles by {{ title }}({{count}})
+</h4>
 
 {% for article in page.object_list %}
 <article class="media content-section">
@@ -15,7 +20,7 @@
     </div>
 </article>
 {% empty %}
-<h4 class="alert alert-info">No Search Result for "{{ request.GET.q }}"</h4>
+<h4 class="alert alert-info">No articles posted yet...</h4>
 {% endfor %}
 
 {% include 'articles/paginator.html' %}

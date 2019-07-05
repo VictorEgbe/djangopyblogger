@@ -10,7 +10,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'index' %}">
                 <img src="{% static 'img/favicon.jpg' %}" width="40" height="40" alt="logo">
             </a>
             <a href="{% url 'index' %}" class="navbar-brand mr-4"> PyBlogger </a>
@@ -26,7 +26,8 @@
                 <!-- Navbar Right Side-->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <a href="#" class="nav-item nav-link">{{ user }}</a>
+                    <a href=" {% url 'user_articles' request.user.username %} "
+                        class="nav-item nav-link">{{ request.user }}</a>
                     <a href="{% url 'password_change' %}" {%if request.path == change %}class="nav-item nav-link active"
                         {% else %}class="nav-item nav-link" {% endif %}>
                         Change Password

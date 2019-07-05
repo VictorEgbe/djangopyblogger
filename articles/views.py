@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -107,3 +108,17 @@ def delete_article(request, slug):
         return redirect('index')
     context = {'title': 'Delete Article', 'article': article}
     return render(request, 'articles/delete.html', context)
+
+
+def user_articles(request, username):
+    page_request = request.GET.get('page')
+    specific_user = get_object_or_404(User, username=username)
+    articles = Article.objects.filter(author=specific_user)
+    paginator = Paginator(articles, 3)
+    page = paginator.get_page(page_request)
+    context = {
+        'title': specific_user,
+        'count': articles.count(),
+        'page': page
+    }
+    return render(request, 'articles/user_articles.html', context)
