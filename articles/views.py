@@ -19,11 +19,11 @@ def index(request):
             Q(title__icontains=query) |
             Q(content__icontains=query) |
             Q(author__username__icontains=query)).distinct()
-        paginator = Paginator(articles, 2)
+        paginator = Paginator(articles, 5)
         page = paginator.get_page(page_request)
     else:
         articles = Article.objects.all()
-        paginator = Paginator(articles, 2)
+        paginator = Paginator(articles, 5)
         page = paginator.get_page(page_request)
     context = {
         'title': 'Home',
