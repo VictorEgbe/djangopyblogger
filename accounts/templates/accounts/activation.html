@@ -1,7 +1,7 @@
 {% autoescape off %}
 
 Hi {{ user.username }},
-You received this email because you created an account with us {{domain}}. Please click on the link to confirm your
+You received this email because you created an account on {{domain}}. Please click on the link to confirm your
 registration,
 https://{{ domain }}{% url 'activate' uidb64=uid token=token %}
 
