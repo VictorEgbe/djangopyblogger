@@ -79,7 +79,7 @@ def registration(request):
                 'domain': current_site.domain
             })
             to_email = [form.cleaned_data.get('email')]
-            mail_subject = 'Activate your 237Blogger account'
+            mail_subject = 'Activate your PyBlogger account'
             email = EmailMessage(mail_subject, message, to=to_email)
             email.send()
             return render(request, 'accounts/activation_info.html')
